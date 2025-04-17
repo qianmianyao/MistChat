@@ -10,6 +10,7 @@ import { ModeToggle } from '@/components/mode-toggle';
 
 interface ChatSidebarProps {
   onSelectItem?: (id: string) => void;
+  activeItem?: string;
 }
 
 interface SidebarItem {
@@ -20,11 +21,17 @@ interface SidebarItem {
   variant?: 'default' | 'ghost';
 }
 
-export function ChatSidebar({ onSelectItem = () => {} }: ChatSidebarProps) {
-  const [activeItem, setActiveItem] = useState('chats');
+export function ChatSidebar({
+  onSelectItem = () => {},
+  activeItem: externalActiveItem,
+}: ChatSidebarProps) {
+  const [internalActiveItem, setInternalActiveItem] = useState('chats');
+
+  // 如果外部提供了 activeItem，则使用它；否则使用内部状态
+  const activeItem = externalActiveItem || internalActiveItem;
 
   const mainItems: SidebarItem[] = [
-    { id: 'chats', icon: <MessageSquare className="h-5 w-5" />, label: '新建聊天' },
+    { id: 'new-chat', icon: <MessageSquare className="h-5 w-5" />, label: '新建聊天' },
     { id: 'contacts', icon: <Users className="h-5 w-5" />, label: '联系人' },
   ];
 
@@ -36,15 +43,15 @@ export function ChatSidebar({ onSelectItem = () => {} }: ChatSidebarProps) {
   const handleItemClick = (id: string, isChatItem = false) => {
     if (isChatItem) {
       // 如果是点击聊天项，设置activeItem为"chats"并传递聊天ID
-      setActiveItem('chats');
+      setInternalActiveItem('chats');
       onSelectItem(id);
-    } else if (id === 'chats') {
-      // 如果点击的是聊天导航项，设置activeItem并传递特殊标识
-      setActiveItem(id);
-      onSelectItem('new-chat');
+    } else if (id === 'new-chat') {
+      // 如果点击的是新建聊天按钮，设置对应的状态并传递特殊标识
+      setInternalActiveItem(id);
+      onSelectItem(id);
     } else {
       // 如果是点击其他导航项，正常处理
-      setActiveItem(id);
+      setInternalActiveItem(id);
       onSelectItem(id);
     }
   };
@@ -57,7 +64,7 @@ export function ChatSidebar({ onSelectItem = () => {} }: ChatSidebarProps) {
           <div className="relative">
             <Avatar className="h-8 w-8">
               <AvatarImage
-                src="https://api.dicebear.com/9.x/thumbs/svg?seed=Christopher"
+                src="https://api.dicebear.com/9.x/thumbs/svg?seed=test_user"
                 alt="用户头像"
               />
               <AvatarFallback>用户</AvatarFallback>
@@ -113,7 +120,7 @@ export function ChatSidebar({ onSelectItem = () => {} }: ChatSidebarProps) {
         </div>
 
         <div className="mt-6">
-          <h3 className="text-xs font-medium text-muted-foreground px-3 mb-2">最近对话</h3>
+          <h3 className="text-xs font-medium text-muted-foreground px-3 mb-2">房间列表</h3>
           <div className="space-y-2">
             {[
               {

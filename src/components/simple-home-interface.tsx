@@ -1,11 +1,12 @@
-'use client';
-
 import type React from 'react';
 import { Button } from '@/components/ui/button';
 import { Card, CardContent } from '@/components/ui/card';
 import { Shield, Lock, Eye, ArrowRight, RefreshCw, Fingerprint } from 'lucide-react';
 import { cn } from '@/lib/utils';
 import { useState } from 'react';
+import { useRegister } from '@/hooks/useChat';
+import { imageToast } from '@/components/ui/toaster';
+import { useNavigate } from 'react-router-dom';
 
 export interface Feature {
   id: string;
@@ -39,12 +40,30 @@ const features: Feature[] = [
   },
 ];
 
+// 主页
 export function SimpleHomeInterface() {
-  const [roomCode, setRoomCode] = useState('');
+  const [username, setUsername] = useState('');
+  const { handleRegister } = useRegister();
+  const navigate = useNavigate();
 
+  const register = async () => {
+    if (!username) {
+      return;
+    }
+    handleRegister(username)
+      .then(() => {
+        imageToast.success('注册成功');
+        navigate('/chat');
+      })
+      .catch(() => {
+        imageToast.error('注册失败,请重试');
+      });
+  };
+
+  // 生成随机用户名
   const generateRandomCode = () => {
-    const code = Math.random().toString(36).substring(2, 8).toUpperCase();
-    setRoomCode(code);
+    const username = Math.random().toString(36).substring(2, 8).toUpperCase();
+    setUsername(username);
   };
 
   return (
@@ -59,9 +78,9 @@ export function SimpleHomeInterface() {
             <h2 className="text-xl font-bold">ParchmentChat</h2>
           </div>
 
-          <h1 className="text-4xl md:text-6xl font-bold mb-6">匿名加密聊天平台</h1>
+          <h1 className="text-4xl md:text-6xl font-bold mb-6">开始你的匿名加密聊天</h1>
           <p className="text-xl text-muted-foreground max-w-2xl mx-auto mb-10">
-            也许, 有些时候, 我们需要一点隐私
+            也许，有些时候，我们需要一点隐私
             <br /> 无需注册，端到端加密，保护您的隐私和通信安全。
           </p>
 
@@ -69,9 +88,9 @@ export function SimpleHomeInterface() {
             <div className="relative w-full max-w-md">
               <input
                 type="text"
-                value={roomCode}
-                onChange={(e) => setRoomCode(e.target.value)}
-                placeholder="输入房间代码或生成新代码"
+                value={username}
+                onChange={(e) => setUsername(e.target.value)}
+                placeholder="选择生成或者输入你的用户名"
                 className="w-full px-4 py-3 rounded-lg bg-background border border-border focus:border-primary focus:ring-1 focus:ring-primary outline-none"
               />
               <Button
@@ -84,7 +103,7 @@ export function SimpleHomeInterface() {
                 生成
               </Button>
             </div>
-            <Button size="lg" className="gap-2 w-full sm:w-auto">
+            <Button onClick={register} size="lg" className="gap-2 w-full sm:w-auto">
               开始聊天 <ArrowRight className="h-4 w-4" />
             </Button>
           </div>
@@ -131,18 +150,18 @@ export function SimpleHomeInterface() {
             {[
               {
                 step: '1',
-                title: '创建或加入房间',
-                description: '生成一个随机房间代码或使用已有代码加入聊天',
+                title: '创建匿名账号',
+                description: '生成一个随机用户名或者指定用户获取匿名密钥',
               },
               {
                 step: '2',
-                title: '分享房间代码',
-                description: '通过安全渠道与您想要交流的人分享房间代码',
+                title: '创建房间密钥',
+                description: '创建一个需要或者不需要密码的房间，并且分享你的房间密钥',
               },
               {
                 step: '3',
                 title: '开始安全聊天',
-                description: '所有消息都经过加密，聊天结束后自动销毁',
+                description: '所有消息都经过加密，聊天结束后可以自动销毁',
               },
             ].map((item, i) => (
               <div key={i} className="flex flex-col items-center text-center">
@@ -159,7 +178,7 @@ export function SimpleHomeInterface() {
 
       {/* Footer */}
       <footer className="mt-auto border-t border-border py-6 px-4 md:px-6 text-center text-muted-foreground">
-        <p className="mb-2">© 2025 SecureChat. 保护您的隐私是我们的使命。</p>
+        <p className="mb-2">© 2025 ParchmentChat. 保护您的隐私是我们的使命。</p>
         <div className="flex justify-center gap-4 text-sm">
           <a href="#" className="hover:text-primary">
             隐私政策
@@ -175,4 +194,3 @@ export function SimpleHomeInterface() {
     </div>
   );
 }
-

@@ -1,5 +1,5 @@
-import { useEffect, useState } from 'react';
-import WebSocketClient from '../lib/websocket';
+import { useState } from 'react';
+import WebSocketClient from '@/lib/websocket';
 
 export type WebSocketOptions = {
   onMessage?: (data: MessageEvent) => void;
@@ -14,7 +14,7 @@ export function useWebSocket(url: string, options?: WebSocketOptions) {
   const [isConnected, setConnected] = useState(false);
   const wsClient = WebSocketClient.getInstance();
 
-  useEffect(() => {
+  const connect = () => {
     const wsOptions: WebSocketOptions = {
       ...options,
       onOpen: () => {
@@ -28,17 +28,19 @@ export function useWebSocket(url: string, options?: WebSocketOptions) {
     };
 
     wsClient.connect(url, wsOptions);
+  };
 
-    return () => {
-      wsClient.disconnect();
-    };
-  }, [url]);
+  const disconnect = () => {
+    wsClient.disconnect();
+  };
 
   const sendMessage = (data: string | ArrayBufferLike | Blob | ArrayBufferView) => {
     return wsClient.send(data);
   };
 
   return {
+    connect,
+    disconnect,
     sendMessage,
     isConnected,
   };

@@ -4,12 +4,11 @@ import Home from '@/pages/Home';
 import Test from '@/pages/Test';
 import React, { Suspense } from 'react';
 import { Loading } from '@/components/ui/loading';
-import Chat from '@/pages/Chat';
 
 // 路由懒加载
-// const Chat = React.lazy(() => import('@/pages/chat'));
 const SecureAccess = React.lazy(() => import('@/pages/SecureAccess'));
 const Share = React.lazy(() => import('@/pages/Share'));
+const Chat = React.lazy(() => import('@/pages/Chat'));
 
 // 加载中组件
 const LoadingFallback = () => (
@@ -35,7 +34,33 @@ const routers = createBrowserRouter([
   },
   {
     path: '/chat',
-    element: <Chat />,
+    element: (
+      <Suspense fallback={<LoadingFallback />}>
+        <Chat />
+      </Suspense>
+    ),
+    children: [
+      {
+        path: '', // 默认路由，显示聊天列表
+        element: null, // 使用父级的 renderContent 处理
+      },
+      {
+        path: 'new', // 新建聊天页面
+        element: null, // 使用父级的 renderContent 处理
+      },
+      {
+        path: ':chatId', // 聊天详情页
+        element: null, // 使用父级的 renderContent 处理
+      },
+      {
+        path: 'contacts', // 联系人页面
+        element: null, // 使用父级的 renderContent 处理
+      },
+      {
+        path: 'settings', // 设置页面
+        element: null, // 使用父级的 renderContent 处理
+      },
+    ],
   },
   {
     path: '/secure-access',
@@ -60,4 +85,3 @@ const AppRouter = () => {
 };
 
 export default AppRouter;
-

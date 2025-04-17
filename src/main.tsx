@@ -3,6 +3,7 @@ import { createRoot } from 'react-dom/client';
 import '@/index.css';
 import { ThemeProvider } from '@/components/theme-provider.tsx';
 import AppRouter from '@/router/router.tsx';
+import { ImageToaster } from '@/components/ui/toaster';
 
 const rootElement = document.getElementById('root')!;
 
@@ -14,6 +15,7 @@ const renderApp = () => {
   root.render(
     <StrictMode>
       <ThemeProvider defaultTheme="system">
+        <ImageToaster position="top-center" reverseOrder={false} />
         <AppRouter />
       </ThemeProvider>
     </StrictMode>
@@ -30,4 +32,3 @@ const renderApp = () => {
 
 // 开始渲染
 renderApp();
-
