@@ -12,20 +12,22 @@ export default defineConfig({
     obfuscatorPlugin({
       options: {
         compact: true,
-        controlFlowFlattening: true,
+        controlFlowFlattening: false,
         controlFlowFlatteningThreshold: 0.75,
-        deadCodeInjection: true,
+        deadCodeInjection: false,
         deadCodeInjectionThreshold: 0.4,
-        disableConsoleOutput: true,
+        // disableConsoleOutput: false,
         stringArray: true,
         stringArrayThreshold: 0.75,
         rotateStringArray: true,
-        stringArrayEncoding: ['rc4'], // or 'rc4'
+        stringArrayEncoding: ['rc4'],
         // selfDefending: true,
         // debugProtection: true,
-        splitStrings: true,
+        splitStrings: false,
         splitStringsChunkLength: 8,
       },
+      include: ['**/*.js', '**/*.jsx', '**/*.ts', '**/*.tsx'],
+      exclude: ['src/router/**', 'src/pages/**/*.route.*', '**/import*', '**/require*'],
     }),
   ],
   resolve: {
@@ -36,7 +38,6 @@ export default defineConfig({
   server: {
     port: 3000,
     host: true,
-    open: true,
     proxy: {
       '/api': {
         target: 'http://127.0.0.1:8080/api',

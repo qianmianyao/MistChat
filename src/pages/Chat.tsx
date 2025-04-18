@@ -7,6 +7,8 @@ import { ChatChats } from '@/components/chat/chat-chats';
 import { ChatContacts } from '@/components/chat/chat-contacts';
 import { ChatSettings } from '@/components/chat/chat-settings';
 import { ChatNewRoom } from '@/components/chat/chat-new-room';
+import { useWebSocket } from '@/hooks/useWebSocket';
+import { useEffect } from 'react';
 
 // 生成头像的辅助函数
 const generateAvatar = (seed: string) => {
@@ -126,6 +128,36 @@ export default function Chat() {
   const navigate = useNavigate();
   const { chatId } = useParams();
   const location = useLocation();
+
+  const { connect } = useWebSocket(
+    `ws://127.0.0.1:8080/api/v1/chat/connect?username=79NK5U&uuid=u_2E9jbddcy1o6SbdMB168dWxJSEzL`,
+    {
+      onOpen: () => console.log('🟢 Connected'),
+      onMessage: (e) => {
+        console.log('📨 收到消息:', e.data);
+        try {
+          const data = JSON.parse(e.data);
+          console.log('📨 解析后的消息:', data);
+        } catch {
+          console.log('📨 原始消息:', e.data);
+        }
+      },
+    }
+  );
+
+  useEffect(() => {
+    console.log('🔄 准备连接WebSocket...');
+
+    const timer = setTimeout(() => {
+      console.log('🔄 执行WebSocket连接...');
+      connect(); // 延迟连接，确保组件 UI & 状态就绪
+    }, 100); // 延迟 100ms
+
+    return () => {
+      console.log('🔄 清理WebSocket定时器');
+      clearTimeout(timer);
+    };
+  }, [connect]); // 添加connect到依赖数组
 
   // 获取当前活动路由
   const getCurrentRoute = () => {

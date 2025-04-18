@@ -15,6 +15,8 @@ export function useWebSocket(url: string, options?: WebSocketOptions) {
   const wsClient = WebSocketClient.getInstance();
 
   const connect = () => {
+    if (wsClient.getStatus()) return; // 避免重复连接
+
     const wsOptions: WebSocketOptions = {
       ...options,
       onOpen: () => {
@@ -25,6 +27,7 @@ export function useWebSocket(url: string, options?: WebSocketOptions) {
         setConnected(false);
         options?.onClose?.();
       },
+      onMessage: options?.onMessage, // 确保onMessage回调被正确传递
     };
 
     wsClient.connect(url, wsOptions);
@@ -32,6 +35,7 @@ export function useWebSocket(url: string, options?: WebSocketOptions) {
 
   const disconnect = () => {
     wsClient.disconnect();
+    setConnected(false);
   };
 
   const sendMessage = (data: string | ArrayBufferLike | Blob | ArrayBufferView) => {

@@ -64,7 +64,7 @@ export function ChatSidebar({
           <div className="relative">
             <Avatar className="h-8 w-8">
               <AvatarImage
-                src="https://api.dicebear.com/9.x/thumbs/svg?seed=test_user"
+                src="https://api.dicebear.com/9.x/thumbs/svg?seed=test_user1222"
                 alt="用户头像"
               />
               <AvatarFallback>用户</AvatarFallback>
@@ -120,6 +120,7 @@ export function ChatSidebar({
         </div>
 
         <div className="mt-6">
+          {/* 房间列表 */}
           <h3 className="text-xs font-medium text-muted-foreground px-3 mb-2">房间列表</h3>
           <div className="space-y-2">
             {[

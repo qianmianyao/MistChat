@@ -4,6 +4,7 @@ import '@/index.css';
 import { ThemeProvider } from '@/components/theme-provider.tsx';
 import AppRouter from '@/router/router.tsx';
 import { ImageToaster } from '@/components/ui/toaster';
+import WebSocketProvider from '@/components/WebSocketProvider.tsx';
 
 const rootElement = document.getElementById('root')!;
 
@@ -16,7 +17,11 @@ const renderApp = () => {
     <StrictMode>
       <ThemeProvider defaultTheme="system">
         <ImageToaster position="top-center" reverseOrder={false} />
-        <AppRouter />
+        {/* WebSocketProvider 只在这里使用一次 */}
+        <WebSocketProvider>
+          {/* 其他组件 */}
+          <AppRouter />
+        </WebSocketProvider>
       </ThemeProvider>
     </StrictMode>
   );

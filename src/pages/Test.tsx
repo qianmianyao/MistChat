@@ -1,6 +1,7 @@
 import { useState } from 'react';
 import { db } from '@/lib/db';
 import { Button } from '@/components/ui/button';
+
 export default function Text({ defaultAge } = { defaultAge: 21 }) {
   const [name, setName] = useState('');
   const [age, setAge] = useState(defaultAge);

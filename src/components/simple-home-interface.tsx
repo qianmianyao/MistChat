@@ -75,10 +75,10 @@ export function SimpleHomeInterface() {
 
           <div className="flex items-center justify-center gap-2 mb-6">
             <Shield className="h-8 w-8 text-primary" />
-            <h2 className="text-xl font-bold">ParchmentChat</h2>
+            <h2 className="text-xl font-bold">Mist Chat</h2>
           </div>
 
-          <h1 className="text-4xl md:text-6xl font-bold mb-6">开始你的匿名加密聊天</h1>
+          <h1 className="text-4xl md:text-6xl font-bold mb-6">迷雾笼罩，隐私无缺</h1>
           <p className="text-xl text-muted-foreground max-w-2xl mx-auto mb-10">
             也许，有些时候，我们需要一点隐私
             <br /> 无需注册，端到端加密，保护您的隐私和通信安全。
@@ -112,10 +112,6 @@ export function SimpleHomeInterface() {
             点击"开始聊天"即表示您同意我们的
             <a href="#" className="underline hover:text-primary p-1">
               服务条款
-            </a>
-            和
-            <a href="#" className="underline hover:text-primary p-1">
-              隐私政策
             </a>
           </p>
         </div>
@@ -178,7 +174,7 @@ export function SimpleHomeInterface() {
 
       {/* Footer */}
       <footer className="mt-auto border-t border-border py-6 px-4 md:px-6 text-center text-muted-foreground">
-        <p className="mb-2">© 2025 ParchmentChat. 保护您的隐私是我们的使命。</p>
+        <p className="mb-2">© 2025 Mist Chat. 保护您的隐私是我们的使命</p>
         <div className="flex justify-center gap-4 text-sm">
           <a href="#" className="hover:text-primary">
             隐私政策
