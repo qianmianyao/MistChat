@@ -1,5 +1,5 @@
 import { useRequest } from 'alova/client';
-import { chatRegister } from '@/api/chat';
+import { chatRegister, chatCreateRoom } from '@/api/chat';
 import { imageToast } from '@/components/ui/toaster';
 
 export const useRegister = () => {
@@ -20,5 +20,30 @@ export const useRegister = () => {
     data,
     error,
     handleRegister,
+  };
+};
+
+export const useCreateRoom = () => {
+  const {
+    loading,
+    data,
+    error,
+    send: handleCreateRoom,
+  } = useRequest(
+    (userUUID: string, roomName: string, password?: string | undefined) =>
+      chatCreateRoom(userUUID, roomName, password),
+    {
+      immediate: false,
+      initialData: {},
+    }
+  ).onError(() => {
+    imageToast.error(`创建房间失败: 网络错误`);
+  });
+
+  return {
+    loading,
+    data,
+    error,
+    handleCreateRoom,
   };
 };

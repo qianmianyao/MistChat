@@ -9,26 +9,27 @@ export default defineConfig({
   plugins: [
     react(),
     tailwindcss(),
-    obfuscatorPlugin({
-      options: {
-        compact: true,
-        controlFlowFlattening: false,
-        controlFlowFlatteningThreshold: 0.75,
-        deadCodeInjection: false,
-        deadCodeInjectionThreshold: 0.4,
-        // disableConsoleOutput: false,
-        stringArray: true,
-        stringArrayThreshold: 0.75,
-        rotateStringArray: true,
-        stringArrayEncoding: ['rc4'],
-        // selfDefending: true,
-        // debugProtection: true,
-        splitStrings: false,
-        splitStringsChunkLength: 8,
-      },
-      include: ['**/*.js', '**/*.jsx', '**/*.ts', '**/*.tsx'],
-      exclude: ['src/router/**', 'src/pages/**/*.route.*', '**/import*', '**/require*'],
-    }),
+    process.env.NODE_ENV === 'production' &&
+      obfuscatorPlugin({
+        options: {
+          compact: true,
+          controlFlowFlattening: false,
+          controlFlowFlatteningThreshold: 0.75,
+          deadCodeInjection: false,
+          deadCodeInjectionThreshold: 0.4,
+          disableConsoleOutput: false,
+          stringArray: true,
+          stringArrayThreshold: 0.75,
+          rotateStringArray: true,
+          stringArrayEncoding: ['rc4'],
+          selfDefending: true,
+          debugProtection: true,
+          splitStrings: false,
+          splitStringsChunkLength: 8,
+        },
+        include: ['**/*.js', '**/*.jsx', '**/*.ts', '**/*.tsx'],
+        exclude: ['src/router/**', 'src/pages/**/*.route.*', '**/import*', '**/require*'],
+      }),
   ],
   resolve: {
     alias: {

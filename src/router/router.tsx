@@ -4,6 +4,7 @@ import Home from '@/pages/Home';
 import Test from '@/pages/Test';
 import React, { Suspense } from 'react';
 import { Loading } from '@/components/ui/loading';
+import RequireAuth from './requireAuth';
 
 // 路由懒加载
 const SecureAccess = React.lazy(() => import('@/pages/SecureAccess'));
@@ -35,9 +36,11 @@ const routers = createBrowserRouter([
   {
     path: '/chat',
     element: (
-      <Suspense fallback={<LoadingFallback />}>
-        <Chat />
-      </Suspense>
+      <RequireAuth>
+        <Suspense fallback={<LoadingFallback />}>
+          <Chat />
+        </Suspense>
+      </RequireAuth>
     ),
     children: [
       {

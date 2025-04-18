@@ -7,6 +7,7 @@ import { useState } from 'react';
 import { useRegister } from '@/hooks/useChat';
 import { imageToast } from '@/components/ui/toaster';
 import { useNavigate } from 'react-router-dom';
+import { useUserStore } from '@/stores/userStore';
 
 export interface Feature {
   id: string;
@@ -46,13 +47,24 @@ export function SimpleHomeInterface() {
   const { handleRegister } = useRegister();
   const navigate = useNavigate();
 
+  const { setUser, isLoggedIn } = useUserStore();
+
   const register = async () => {
-    if (!username) {
+    if (isLoggedIn) {
+      console.log('用户已登录，跳转到聊天页面');
+      navigate('/chat');
       return;
     }
+
+    if (!username) {
+      console.log('用户名是必须的');
+      return;
+    }
+
     handleRegister(username)
-      .then(() => {
+      .then((e) => {
         imageToast.success('注册成功');
+        setUser({ id: e.data.uuid, username: e.data.username });
         navigate('/chat');
       })
       .catch(() => {
@@ -85,24 +97,31 @@ export function SimpleHomeInterface() {
           </p>
 
           <div className="flex flex-col sm:flex-row items-center justify-center gap-4 mb-12">
-            <div className="relative w-full max-w-md">
-              <input
-                type="text"
-                value={username}
-                onChange={(e) => setUsername(e.target.value)}
-                placeholder="选择生成或者输入你的用户名"
-                className="w-full px-4 py-3 rounded-lg bg-background border border-border focus:border-primary focus:ring-1 focus:ring-primary outline-none"
-              />
-              <Button
-                size="sm"
-                variant="ghost"
-                className="absolute right-2 top-1/2 -translate-y-1/2"
-                onClick={generateRandomCode}
-              >
-                <Fingerprint className="h-4 w-4 mr-1" />
-                生成
-              </Button>
-            </div>
+            {
+              // 如果用户已经登录就不显示输入框
+              !isLoggedIn ? (
+                <div className="relative w-full max-w-md">
+                  <input
+                    type="text"
+                    value={username}
+                    onChange={(e) => setUsername(e.target.value)}
+                    placeholder="选择生成或者输入你的用户名"
+                    className="w-full px-4 py-3 rounded-lg bg-background border border-border focus:border-primary focus:ring-1 focus:ring-primary outline-none"
+                  />
+                  <Button
+                    size="sm"
+                    variant="ghost"
+                    className="absolute right-2 top-1/2 -translate-y-1/2"
+                    onClick={generateRandomCode}
+                  >
+                    <Fingerprint className="h-4 w-4 mr-1" />
+                    生成
+                  </Button>
+                </div>
+              ) : (
+                ''
+              )
+            }
             <Button onClick={register} size="lg" className="gap-2 w-full sm:w-auto">
               开始聊天 <ArrowRight className="h-4 w-4" />
             </Button>
